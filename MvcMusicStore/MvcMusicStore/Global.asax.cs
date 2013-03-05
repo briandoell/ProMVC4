@@ -16,6 +16,8 @@ namespace MvcMusicStore
     {
         protected void Application_Start()
         {
+
+            System.Data.Entity.Database.SetInitializer(new MusicStoreInitializer());
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);
@@ -23,6 +25,25 @@ namespace MvcMusicStore
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+        }
+    }
+
+    public class MusicStoreInitializer : System.Data.Entity.DropCreateDatabaseAlways<MvcMusicStore.Models.MvcMusicStoreContext>
+    {
+        protected override void Seed(Models.MvcMusicStoreContext context)
+        {
+            context.Artists.Add(new Models.Artist { Name = "Al Di Meola" });
+            context.Genres.Add(new Models.Genre { Name = "Jazz" });
+
+            context.Albums.Add(new Models.Album
+            {
+                Artist = new Models.Artist { Name = "Rush" },
+                Genre = new Models.Genre { Name = "Rock" },
+                Price = 9.99m,
+                Title = "Carvan"
+            });
+
+            base.Seed(context);
         }
     }
 }
